@@ -1,24 +1,30 @@
-name: input-and-locale
-type: apt
-source:
-  packages:
-  - firmware-linux
-  - firmware-linux-nonfree
-  - firmware-linux-free
-  - firmware-iwlwifi
-  - firmware-realtek
-  - firmware-atheros
-  - intel-microcode
-  - amd64-microcode
-  - b43-fwcutter
-  - firmware-b43-installer
-  - firmware-brcm80211
-  - firmware-sof-signed
+name: firmware-update
+type: shell
+commands:
+  - curl -O https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/snapshot/linux-firmware-20240513.tar.gz
+  - tar xzf linux-firmware-20240513.tar.gz
+  - rsync -avHAX --existing linux-firmware-20240513/ /usr/lib/firmware/
+  - rm -r linux-firmware-20240513.tar.gz
 modules:
-- name: firmware-update
-  type: shell
-  commands:
-    - curl -O https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/snapshot/linux-firmware-20240513.tar.gz
-    - tar xzf linux-firmware-20240513.tar.gz
-    - rsync -avHAX --existing linux-firmware-20240513/ /usr/lib/firmware/
-    - rm -r linux-firmware-20240513.tar.gz
+- name: dependencies
+  type: apt
+  source:
+    packages:
+    - curl
+    - rsync
+- name: input-and-locale
+  type: apt
+  source:
+    packages:
+    - firmware-linux
+    - firmware-linux-nonfree
+    - firmware-linux-free
+    - firmware-iwlwifi
+    - firmware-realtek
+    - firmware-atheros
+    - intel-microcode
+    - amd64-microcode
+    - b43-fwcutter
+    - firmware-b43-installer
+    - firmware-brcm80211
+    - firmware-sof-signed
