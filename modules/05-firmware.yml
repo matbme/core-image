@@ -4,7 +4,8 @@ commands:
   - curl -O https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/snapshot/linux-firmware-20240513.tar.gz
   - tar xzf linux-firmware-20240513.tar.gz
   - rsync -avHAX --existing linux-firmware-20240513/ /usr/lib/firmware/
-  - rm -r linux-firmware-20240513.tar.gz
+  - rm linux-firmware-20240513.tar.gz
+  - rm -rf linux-firmware-20240513
 modules:
 - name: dependencies
   type: apt
