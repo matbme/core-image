@@ -1,11 +1,10 @@
-name: firmware-update
+name: divert-originals
 type: shell
 commands:
-  - curl -O https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/snapshot/linux-firmware-20240513.tar.gz
-  - tar xzf linux-firmware-20240513.tar.gz
-  - rsync -avHAX --existing linux-firmware-20240513/ /usr/lib/firmware/
-  - rm linux-firmware-20240513.tar.gz
-  - rm -rf linux-firmware-20240513
+  - |
+    for file in $(find /usr/lib/firmware/ -type f); do
+      dpkg-divert --add --rename --divert "/usr/lib/firmware/${file}-old" "/usr/lib/firmware/${file}"
+    done
 modules:
 - name: dependencies
   type: apt
@@ -13,7 +12,7 @@ modules:
     packages:
     - curl
     - rsync
-- name: input-and-locale
+- name: install-firmware
   type: apt
   source:
     packages:
@@ -29,3 +28,11 @@ modules:
     - firmware-b43-installer
     - firmware-brcm80211
     - firmware-sof-signed
+- name: firmware-update
+  type: shell
+  commands:
+    - curl -O https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/snapshot/linux-firmware-20240513.tar.gz
+    - tar xzf linux-firmware-20240513.tar.gz
+    - rsync -avHAX --existing linux-firmware-20240513/ /usr/lib/firmware/
+    - rm linux-firmware-20240513.tar.gz
+    - rm -rf linux-firmware-20240513
