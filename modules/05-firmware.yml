@@ -2,9 +2,7 @@ name: divert-originals
 type: shell
 commands:
   - |
-    for file in $(find /usr/lib/firmware/ -type f); do
-      dpkg-divert --add --rename --divert "/usr/lib/firmware/${file}-old" "/usr/lib/firmware/${file}"
-    done
+    for file in $(find /usr/lib/firmware/ -type f); do dpkg-divert --add --rename --divert "/usr/lib/firmware/${file}-old" "/usr/lib/firmware/${file}"; done
 modules:
 - name: dependencies
   type: apt
